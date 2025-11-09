@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Registrar Venta{% endblock %}
+
+{% block content %}
+    <article>
+        <header>
+            <h2>Registrar Nueva Venta</h2>
+        </header>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <fieldset>
+                <legend>Datos de la Venta</legend>
+                {{ form.as_p }}
+            </fieldset>
+
+            <fieldset>
+                <legend>Productos (Detalle de la venta)</legend>
+                
+                {{ formset.management_form }}
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Almacén</th>
+                            <th>Cantidad</th>
+                            <th>Quitar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item_form in formset.forms %}
+                        <tr>
+                            <td>{{ item_form.producto }}</td>
+                            <td>{{ item_form.almacen }}</td>
+                            <td>{{ item_form.cantidad }}</td>
+                            <td>{{ item_form.DELETE }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                {% if formset.non_form_errors %}
+                    <small class="error">{{ formset.non_form_errors }}</small>
+                {% endif %}
+            </fieldset>
+            
+            <button type="submit">Guardar Venta</button>
+        </form>
+    </article>
+{% endblock %}

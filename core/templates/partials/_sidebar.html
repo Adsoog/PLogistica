@@ -1,0 +1,36 @@
+<aside class="sidebar" data-turbo-permanent>
+  <header>
+    <hgroup>
+      <h3>Baby Romerito</h3>
+    </hgroup>
+  </header>
+
+  <nav>
+    <h5>Inventario</h5>
+    <ul>
+      <li><a href="{% url 'inventario:existencias-list' %}">Stock Actual</a></li>
+      <li><a href="{% url 'inventario:movimiento-list' %}">Movimientos</a></li>
+    </ul>
+
+    <h5>Catálogo</h5>
+    <ul>
+      <li><a href="{% url 'inventario:producto-list' %}">Productos</a></li>
+      <li><a href="{% url 'inventario:categoria-list' %}">Categorías</a></li>
+      <li><a href="{% url 'almacen:almacen-list' %}">Almacenes</a></li>
+    </ul>
+
+    <h5>Terceros</h5>
+    <ul>
+      <li><a href="{% url 'inventario:cliente-list' %}">Clientes</a></li>
+      <li><a href="{% url 'inventario:proveedor-list' %}">Proveedores</a></li>
+    </ul>
+
+    <h5>Documentos</h5>
+    <ul>
+      <li><a href="{% url 'inventario:venta-create' %}">Nueva Venta</a></li>
+      <li><a href="{% url 'inventario:compra-create' %}">Nueva Compra</a></li>
+      <li><a href="{% url 'inventario:venta-list' %}">Ver Ventas</a></li>
+      <li><a href="{% url 'inventario:compra-list' %}">Ver Compras</a></li>
+    </ul>
+  </nav>
+</aside>

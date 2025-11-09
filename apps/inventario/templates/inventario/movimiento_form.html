@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Movimiento{% endblock %}
+
+{% block content %}
+    
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h2 class="h4 mb-0">Registrar Movimiento de Inventario</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                
+                                {{ field }}
+                                
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary">Guardar Movimiento</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Historial de Movimientos{% endblock %}
+
+{% block content %}
+    <header>
+        <hgroup>
+            <h2>Historial de Movimientos</h2>
+            <h3>Todas las entradas, salidas y ajustes registrados.</h3>
+        </hgroup>
+    </header>
+    
+    <figure>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Almacén</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Origen / Motivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in movimientos %}
+                <tr>
+                    <td>{{ m.fecha|date:"d M Y, H:i" }}</td>
+                    <td>{{ m.get_tipo_display }}</td>
+                    <td>{{ m.producto.nombre }}</td>
+                    <td>{{ m.almacen.nombre }}</td>
+                    <td><strong>{{ m.cantidad }}</strong></td>
+                    <td>
+                        {% if m.compra %}
+                            <a href="#">Compra #{{ m.compra.id }}</a>
+                        {% elif m.venta %}
+                            <a href="#">Venta #{{ m.venta.id }}</a>
+                        {% elif m.tipo == 'AJUSTE' %}
+                            {{ m.motivo|default:"Ajuste Manual" }}
+                        {% else %}
+                            {{ m.motivo|default:"-" }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay movimientos registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
+{% endblock %}

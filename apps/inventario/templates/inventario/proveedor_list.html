@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Proveedores{% endblock %}
+
+{% block content %}
+    <header>
+        <hgroup>
+            <h2>Proveedores</h2>
+            <h3>Listado de proveedores.</h3>
+        </hgroup>
+        <a href="{% url 'inventario:proveedor-create' %}" role="button">Nuevo Proveedor</a>
+    </header>
+    <figure>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">RUC</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in proveedores %}
+                <tr>
+                    <td>{{ p.nombre }}</td>
+                    <td>{{ p.ruc|default:"-" }}</td>
+                    <td>{{ p.telefono|default:"-" }}</td>
+                    <td><a href="{% url 'inventario:proveedor-update' p.pk %}" class="secondary">Editar</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No hay proveedores registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
+{% endblock %}

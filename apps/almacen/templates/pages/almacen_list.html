@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Almacenes{% endblock %}
+
+{% block content %}
+
+<header>
+  <h2 style="display:inline-block; margin-right: 1rem;">Almacenes</h2>
+  <button hx-get="{% url 'almacen:almacen-create' %}" hx-target='#almacen-table' hx-swap="afterbegin" role="button">Nuevo Almacén</button>
+</header>
+
+
+<figure>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col" style="width: 35%;">Nombre</th> 
+        
+        <th scope="col" style="width: 50%;">Ubicación</th> 
+        
+        <th scope="col" style="width: 15%;">Acción</th> 
+      </tr>
+    </thead>
+    <tbody id="almacen-table">
+      {% for almacen in almacenes %}
+        {% include 'partials/_almacen_list_rows.html' %}
+      {% empty %}
+      <tr>
+        <td colspan="2">No hay almacenes registrados.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</figure>
+{% endblock %}

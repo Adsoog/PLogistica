@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+    <header>
+        <hgroup>
+            <h2>Ventas</h2>
+            <h3>Listado de ventas a clientes.</h3>
+        </hgroup>
+        <a href="{% url 'inventario:venta-create' %}" role="button">Registrar Venta</a>
+    </header>
+    <figure>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                <tr>
+                    <td>{{ v.id }}</td>
+                    <td>{{ v.cliente.nombre }}</td>
+                    <td>{{ v.fecha }}</td>
+                    <td>{{ v.numero_documento|default:"-" }}</td>
+                    <td>S/ {{ v.total_venta }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No hay ventas registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
+{% endblock %}
