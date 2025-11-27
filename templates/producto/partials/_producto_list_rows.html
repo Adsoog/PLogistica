@@ -1,0 +1,34 @@
+<tr id="producto-{{ producto.pk }}">
+    
+    <td>{{ producto.sku }}</td>
+
+    <td>{{ producto.codigo_barra }}</td>
+    
+    <td>{{ producto.nombre }}</td>
+    
+    <td>{{ producto.categoria.nombre|default:"-" }}</td>
+    
+    <td>{{ producto.costo_venta|floatformat:2 }}</td>
+    
+    <td>
+        <div class="d-flex gap-2 justify-content-end"> 
+            
+            <button 
+              hx-get="{% url 'producto-edit' producto.pk %}"
+              hx-target="#producto-{{ producto.pk }}" 
+              hx-swap="outerHTML"
+              class="btn btn-warning btn-sm">
+              Editar
+            </button>
+            
+            <button 
+              hx-delete="{% url 'producto-delete' producto.pk %}"
+              hx-target="#producto-{{ producto.pk }}"
+              hx-confirm="¿Estás seguro de que quieres eliminar '{{ producto.nombre }}'?"
+              hx-swap="outerHTML" 
+              class="btn btn-danger btn-sm">
+              Eliminar
+            </button>
+        </div>
+    </td>
+</tr>

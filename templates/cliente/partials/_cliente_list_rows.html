@@ -1,0 +1,30 @@
+<tr id="cliente-{{ cliente.pk }}">
+    
+    <td>{{ cliente.nombre }}</td>
+    
+    <td>{{ cliente.ruc_dni|default:"-" }}</td>
+    
+    <td>{{ cliente.telefono|default:"-" }}</td>
+    
+    <td>
+        <div class="d-flex gap-2 justify-content-end"> 
+            
+            <button 
+              hx-get="{% url 'cliente-edit' cliente.pk %}"
+              hx-target="#cliente-{{ cliente.pk }}" 
+              hx-swap="outerHTML"
+              class="btn btn-warning btn-sm">
+              Editar
+            </button>
+            
+            <button 
+              hx-delete="{% url 'cliente-delete' cliente.pk %}"
+              hx-target="#cliente-{{ cliente.pk }}"
+              hx-confirm="¿Estás seguro de que quieres eliminar a '{{ cliente.nombre }}'?"
+              hx-swap="outerHTML" 
+              class="btn btn-danger btn-sm">
+              Eliminar
+            </button>
+        </div>
+    </td>
+</tr>

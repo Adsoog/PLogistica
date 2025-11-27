@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Compras{% endblock %}
+
+{% block content %}
+
+<header class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">Compras</h2>
+  <a href="{% url 'compra-create' %}" class="btn btn-primary">
+    Nueva Compra
+  </a>
+</header>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <table id="datatable-compras" class="table table-striped table-hover" style="width:100%">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Proveedor</th> 
+          <th>Fecha</th> 
+          <th>Documento</th> 
+          <th>Estado</th>
+          <th>Total</th>
+          <th>Acciones</th> 
+        </tr>
+      </thead>
+      <tbody id="compra-table">
+        {% for compra in compras %}
+        <tr>
+          <td>{{ compra.id }}</td>
+          <td>{{ compra.proveedor.nombre|default:"-" }}</td>
+          <td>{{ compra.fecha|date:"d/m/Y" }}</td>
+          <td>{{ compra.numero_documento|default:"-" }}</td>
+          <td>
+            <span class="badge 
+              {% if compra.estado == 'BORRADOR' %}bg-secondary
+              {% elif compra.estado == 'CONFIRMADA' %}bg-success
+              {% elif compra.estado == 'RECHAZADA' %}bg-danger
+              {% endif %}">
+              {{ compra.get_estado_display }}
+            </span>
+          </td>
+          <td>S/ {{ compra.total_compra|floatformat:2 }}</td>
+          <td>
+            <div class="d-flex gap-2">
+              <a href="{% url 'compra-detail' compra.pk %}" class="btn btn-info btn-sm">Ver</a>
+              <a href="{% url 'compra-edit' compra.pk %}" class="btn btn-warning btn-sm">Editar</a>
+              <a href="{% url 'compra-delete' compra.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="text-center">No hay compras registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+    $('#datatable-compras').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/2.1.0/i18n/es-ES.json' },
+        order: [[0, 'desc']] 
+    });
+});
+</script>
+{% endblock %}

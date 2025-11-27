@@ -1,0 +1,30 @@
+<tr id="proveedor-{{ proveedor.pk }}">
+    
+    <td>{{ proveedor.nombre }}</td>
+    
+    <td>{{ proveedor.ruc|default:"-" }}</td>
+    
+    <td>{{ proveedor.telefono|default:"-" }}</td>
+    
+    <td>
+        <div class="d-flex gap-2 justify-content-end"> 
+            
+            <button 
+              hx-get="{% url 'proveedor-edit' proveedor.pk %}"
+              hx-target="#proveedor-{{ proveedor.pk }}" 
+              hx-swap="outerHTML"
+              class="btn btn-warning btn-sm">
+              Editar
+            </button>
+            
+            <button 
+              hx-delete="{% url 'proveedor-delete' proveedor.pk %}"
+              hx-target="#proveedor-{{ proveedor.pk }}"
+              hx-confirm="¿Estás seguro de que quieres eliminar a '{{ proveedor.nombre }}'?"
+              hx-swap="outerHTML" 
+              class="btn btn-danger btn-sm">
+              Eliminar
+            </button>
+        </div>
+    </td>
+</tr>

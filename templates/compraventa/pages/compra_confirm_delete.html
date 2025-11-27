@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Eliminar Compra{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h2 class="mb-4">Eliminar Compra</h2>
+    <p>¿Estás seguro de que quieres eliminar la compra <strong>#{{ object.id }}</strong> del proveedor <strong>{{ object.proveedor.nombre }}</strong>?</p>
+    
+    {% if object.estado == 'CONFIRMADA' %}
+    <p class="text-danger fw-bold">
+      ADVERTENCIA: Esta compra está CONFIRMADA. Eliminarla NO reversará los movimientos de inventario ya creados. 
+      La forma correcta de anularla es crear un movimiento de ajuste.
+    </p>
+    {% else %}
+    <p class="text-muted">Esta acción no se puede deshacer y eliminará todos los items asociados.</p>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+      <a href="{% url 'compra-list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

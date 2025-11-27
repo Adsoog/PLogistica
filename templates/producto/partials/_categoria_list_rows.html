@@ -1,0 +1,28 @@
+<tr id="categoria-{{ categoria.pk }}">
+    
+    <td>{{ categoria.nombre }}</td>
+    
+    <td>{{ categoria.descripcion|default:"-" }}</td>
+    
+    <td>
+        <div class="d-flex gap-2 justify-content-end"> 
+            
+            <button 
+              hx-get="{% url 'categoria-edit' categoria.pk %}"
+              hx-target="#categoria-{{ categoria.pk }}" 
+              hx-swap="outerHTML"
+              class="btn btn-warning btn-sm">
+              Editar
+            </button>
+            
+            <button 
+              hx-delete="{% url 'categoria-delete' categoria.pk %}"
+              hx-target="#categoria-{{ categoria.pk }}"
+              hx-confirm="¿Estás seguro de que quieres eliminar '{{ categoria.nombre }}'?"
+              hx-swap="outerHTML" 
+              class="btn btn-danger btn-sm">
+              Eliminar
+            </button>
+        </div>
+    </td>
+</tr>

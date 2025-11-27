@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% block title %}Proveedores{% endblock %}
+
+{% block content %}
+
+<header class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">Proveedores</h2>
+  <button 
+    hx-get="{% url 'proveedor-create' %}" 
+    hx-target="#proveedor-table" 
+    hx-swap="afterbegin" 
+    class="btn btn-primary">
+    Nuevo Proveedor
+  </button>
+</header>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <table id="datatable-proveedores" class="table table-striped table-hover" style="width:100%">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 30%;">Nombre</th> 
+          <th style="width: 30%;">RUC</th> 
+          <th style="width: 25%;">Teléfono</th> 
+          <th style="width: 15%;">Acción</th> 
+        </tr>
+      </thead>
+      <tbody id="proveedor-table">
+        {% for proveedor in proveedores %}
+          {% include 'proveedor/partials/_proveedor_list_rows.html' %}
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center">No hay proveedores registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+    $('#datatable-proveedores').DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/2.1.0/i18n/es-ES.json',
+        },
+    });
+});
+</script>
+{% endblock %}

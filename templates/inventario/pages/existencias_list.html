@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% block title %}Stock de Existencias{% endblock %}
+
+{% block content %}
+
+<header class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">Stock de Existencias</h2>
+  </header>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <table id="datatable-existencias" class="table table-striped table-hover" style="width:100%">
+      <thead class="table-dark">
+        <tr>
+          <th>Producto</th> 
+          <th>Almacén</th> 
+          <th>Cantidad Actual</th> 
+        </tr>
+      </thead>
+      <tbody id="existencias-table">
+        {% for existencia in existencias %}
+          {% include 'inventario/partials/_existencias_list_rows.html' %}
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center">No hay existencias registradas.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+    $('#datatable-existencias').DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/2.1.0/i18n/es-ES.json',
+        },
+        order: [[0, 'asc']]
+    });
+});
+</script>
+{% endblock %}

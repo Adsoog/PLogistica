@@ -1,0 +1,114 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Venta #{{ venta.id }}{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h3 class="m-0">Venta #{{ venta.id }}</h3>
+            <span class="badge rounded-pill 
+                {% if venta.estado == 'BORRADOR' %}bg-secondary
+                {% elif venta.estado == 'CONFIRMADA' %}bg-success
+                {% elif venta.estado == 'RECHAZADA' %}bg-danger
+                {% else %}bg-light text-dark border{% endif %} fs-6 px-3 py-2">
+                {{ venta.get_estado_display|default:"Borrador" }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold">
+                    <i class="bi bi-person-lines-fill"></i> Datos Generales
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Cliente</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" 
+                                       value="{{ venta.cliente.nombre|default:'' }}" 
+                                       placeholder="Buscar cliente..." 
+                                       readonly>
+                                <button class="btn btn-outline-primary" type="button">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                            {% if not venta.cliente %}
+                                <div class="text-warning small mt-1">
+                                    <i class="bi bi-exclamation-triangle"></i> Seleccione un cliente
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Fecha</label>
+                            <input type="date" class="form-control" value="{{ venta.fecha|date:'Y-m-d' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Documento</label>
+                            <input type="text" class="form-control" 
+                                   value="{{ venta.numero_documento|default:'' }}" 
+                                   placeholder="B-0001">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm h-100">
+                
+                <div class="card-header bg-light p-3 border-bottom">
+                    <form hx-post="{% url 'venta-dinamica-item-create' venta.pk %}" 
+                          hx-target="#items-container" 
+                          hx-swap="outerHTML"
+                          hx-on::after-request="this.reset()" 
+                          hx-trigger="keyup delay:500ms"
+                          class="row g-2 align-items-center">
+                        
+                        {% csrf_token %}
+                        <div class="col-auto">
+                            <label class="fw-bold text-primary"><i class="bi bi-upc-scan"></i> Escáner:</label>
+                        </div>
+                        <div class="col">
+                            <input type="text" 
+                                   name="codigo_barra" 
+                                   class="form-control" 
+                                   placeholder="Escanea el código de barras o escribe SKU..." 
+                                   autofocus 
+                                   autocomplete="off">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-plus-lg"></i> Agregar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-body p-0 table-responsive">
+                    {% include 'compraventa/partials/venta_items_table.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed-bottom bg-white border-top p-3 shadow-lg" style="z-index: 1030;">
+        <div class="container-fluid d-flex justify-content-end gap-2">
+            <a href="{% url 'venta-list' %}" class="btn btn-outline-secondary px-4">Cancelar / Salir</a>
+            <button type="button" class="btn btn-success px-4 fw-bold">
+                <i class="bi bi-check-circle-fill"></i> Confirmar Venta
+            </button>
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom: 80px;"></div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% load crispy_forms_tags %}
+<tr id="edit-categoria-{{ categoria.pk }}">
+  <td colspan="3" class="p-0">
+    <form hx-post="{% url 'categoria-edit' categoria.pk %}" 
+          hx-target="closest tr" 
+          hx-swap="outerHTML settle:1s"
+          class="m-0">
+      {% csrf_token %}
+      
+      <table class="w-100">
+        <tr>
+          <td class="p-2" style="width: 40%;"> 
+            {{ form.nombre|as_crispy_field }}
+          </td>
+
+          <td class="p-2" style="width: 45%;"> 
+            {{ form.descripcion|as_crispy_field }}
+          </td>
+          
+          <td class="p-2" style="width: 15%;">
+            <div class="d-flex gap-2 justify-content-end">
+              <button type="submit" class="btn btn-success btn-sm">Editar</button> 
+              <button type="button" 
+                      hx-get="{% url 'categoria-list' %}"
+                      hx-target="body"
+                      hx-swap="outerHTML"
+                      class="btn btn-secondary btn-sm">
+                Cancelar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger m-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+    </form>
+  </td>
+</tr>

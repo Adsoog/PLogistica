@@ -1,0 +1,28 @@
+<tr id="almacen-{{ almacen.pk }}">
+    
+    <td>{{ almacen.nombre }}</td>
+    
+    <td>{{ almacen.ubicacion|default:"-" }}</td>
+    
+    <td>
+        <div class="d-flex gap-2 justify-content-end"> 
+            
+            <button 
+              hx-get="{% url 'almacen-edit' almacen.pk %}"
+              hx-target="#almacen-{{ almacen.pk }}" 
+              hx-swap="outerHTML"
+              class="btn btn-warning btn-sm">
+              Editar
+            </button>
+            
+            <button 
+              hx-delete="{% url 'almacen-delete' almacen.pk %}"
+              hx-target="#almacen-{{ almacen.pk }}"
+              hx-confirm="¿Estás seguro de que quieres eliminar '{{ almacen.nombre }}'?"
+              hx-swap="outerHTML" 
+              class="btn btn-danger btn-sm">
+              Eliminar
+            </button>
+        </div>
+    </td>
+</tr>

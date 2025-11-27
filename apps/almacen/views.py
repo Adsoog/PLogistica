@@ -7,7 +7,7 @@ from django.views.generic import ListView
 
 class AlmacenListView(ListView):
     model = Almacen
-    template_name = 'pages/almacen_list.html'
+    template_name = 'almacen/pages/almacen_list.html'
     context_object_name = 'almacenes'
 
 
@@ -16,13 +16,13 @@ def almacen_create(request):
         form = AlmacenForm(request.POST)
         if form.is_valid():
             almacen = form.save()
-            return render(request, 'partials/_almacen_list_rows.html', {'almacen': almacen})
+            return render(request, 'almacen/partials/_almacen_list_rows.html', {'almacen': almacen})
     else:
         form = AlmacenForm()
     context = {
         'form': form
     }
-    return render(request, 'forms/_almacen_form.html', context)
+    return render(request, 'almacen/forms/_almacen_form.html', context)
 
 
 def almacen_edit(request, pk):
@@ -31,14 +31,14 @@ def almacen_edit(request, pk):
         form = AlmacenForm(request.POST, instance=almacen)
         if form.is_valid():
             almacen = form.save()
-            return render(request, 'partials/_almacen_list_rows.html', {'almacen': almacen})
+            return render(request, 'almacen/partials/_almacen_list_rows.html', {'almacen': almacen})
     else:
         form = AlmacenForm(instance=almacen)
     context = {
         'form': form,
         'almacen': almacen
     }
-    return render(request, 'forms/_almacen_edit.html', context)
+    return render(request, 'almacen/forms/_almacen_edit.html', context)
 
 
 def almacen_delete(request, pk):

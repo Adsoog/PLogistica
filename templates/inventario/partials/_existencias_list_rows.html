@@ -1,0 +1,5 @@
+<tr id="existencia-{{ existencia.pk }}">
+    <td>{{ existencia.producto.nombre }}</td>
+    <td>{{ existencia.almacen.nombre }}</td>
+    <td>{{ existencia.cantidad|floatformat:2 }}</td>
+</tr>

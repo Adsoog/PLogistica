@@ -1,0 +1,48 @@
+{% load crispy_forms_tags %}
+<tr id="new-movimiento-row">
+  <td colspan="6" class="p-0">
+    <form hx-post="{% url 'movimiento-create' %}" 
+          hx-target="closest tr" 
+          hx-swap="outerHTML settle:1s"
+          class="m-0">
+      {% csrf_token %}
+      
+      <table class="w-100">
+        <tr>
+          <td class="p-2" style="width: 35%;"> 
+            {{ form.producto|as_crispy_field }}
+          </td>
+          <td class="p-2" style="width: 20%;"> 
+            {{ form.almacen|as_crispy_field }}
+          </td>
+          <td class="p-2" style="width: 15%;"> 
+            {{ form.tipo|as_crispy_field }}
+          </td>
+          <td class="p-2" style="width: 15%;"> 
+            {{ form.cantidad|as_crispy_field }}
+          </td>
+          <td class="p-2" style="width: 15%;">
+            {{ form.motivo|as_crispy_field }}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="p-2">
+            <div class="d-flex justify-content-end gap-2">
+              <button type="submit" class="btn btn-primary btn-sm">Guardar Movimiento</button> 
+              <button type="button" 
+                      hx-get="{% url 'movimiento-list' %}"
+                      hx-target="body"
+                      hx-swap="outerHTML"
+                      class="btn btn-secondary btn-sm">
+                Cancelar
+              </button>
+            </div>
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger mt-2">{{ form.non_field_errors }}</div>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </form>
+  </td>
+</tr>

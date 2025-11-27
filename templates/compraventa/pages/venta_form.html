@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}{% if object %}Editar Venta{% else %}Nueva Venta{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h2 class="mb-4">{% if object %}Editar Venta #{{ object.id }}{% else %}Nueva Venta{% endif %}</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="card mb-4">
+        <div class="card-header">Datos de la Venta</div>
+        <div class="card-body">
+          {{ form|crispy }}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Items de la Venta</div>
+        <div class="card-body">
+          
+          {{ formset.management_form }}
+          
+          <table class="table" id="items-table">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 50%;">Producto</th>
+                <th style="width: 20%;">Cantidad</th>
+                <th style="width: 20%;">Precio</th>
+                <th style="width: 10%;">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody id="formset-container">
+              {% for item_form in formset %}
+              <tr class="item-form-row">
+                <td>{{ item_form.producto|as_crispy_field }}</td>
+                <td>{{ item_form.cantidad|as_crispy_field }}</td>
+                <td>{{ item_form.precio_venta|as_crispy_field }}</td>
+                <td class="text-center align-middle">
+                  {% if item_form.instance.pk %}
+                    {{ item_form.DELETE }}
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <template id="item-form-template">
+            <tr class="item-form-row">
+              <td>{{ formset.empty_form.producto|as_crispy_field }}</td>
+              <td>{{ formset.empty_form.cantidad|as_crispy_field }}</td>
+              <td>{{ formset.empty_form.precio_venta|as_crispy_field }}</td>
+              <td class="text-center align-middle">
+                <button type="button" class="btn btn-danger btn-sm remove-form-row">Quitar</button>
+              </td>
+            </tr>
+          </template>
+
+          <button type="button" id="add-form-row" class="btn btn-success btn-sm mt-2">Añadir Item</button>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Guardar Venta</button>
+        <a href="{% url 'venta-list' %}" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('formset-container');
+    const template = document.getElementById('item-form-template');
+    // NOTA: El prefijo por defecto del formset (de 'items')
+    const totalFormsInput = document.getElementById('id_items-TOTAL_FORMS'); 
+    
+    document.getElementById('add-form-row').addEventListener('click', function() {
+        let formIndex = parseInt(totalFormsInput.value);
+        
+        let newRowHtml = template.innerHTML.replace(/__prefix__/g, formIndex);
+        
+        let tempDiv = document.createElement('tbody');
+        tempDiv.innerHTML = newRowHtml;
+        let newRow = tempDiv.firstElementChild;
+
+        container.appendChild(newRow);
+        totalFormsInput.value = formIndex + 1;
+    });
+
+    container.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('remove-form-row')) {
+            e.target.closest('.item-form-row').remove();
+        }
+    });
+});
+</script>
+{% endblock %}

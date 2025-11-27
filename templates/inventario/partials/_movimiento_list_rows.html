@@ -1,0 +1,8 @@
+<tr id="movimiento-{{ movimiento.pk }}">
+    <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+    <td>{{ movimiento.get_tipo_display }}</td>
+    <td>{{ movimiento.producto.nombre }}</td>
+    <td>{{ movimiento.almacen.nombre }}</td>
+    <td>{{ movimiento.cantidad|floatformat:2 }}</td>
+    <td>{{ movimiento.motivo|default:"-" }}</td>
+</tr>

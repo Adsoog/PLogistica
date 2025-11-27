@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Inicio - Baby Romerito{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      
+      <div class="text-center mb-5">
+        <img src="{% static 'img/babyromerito.png' %}" alt="Baby Romerito Logo" style="width: 150px; height: 150px; border-radius: 50%;" class="mb-3">
+        
+        <h1 class="display-4 fw-bold">Bienvenido al Sistema de Inventario</h1>
+        <p class="fs-4 text-muted">Gestión de Stock, Compras y Ventas "Baby Romerito"</p>
+      </div>
+
+      <div class="p-5 rounded-3 shadow-sm">
+        <h2 class="fw-bold">¿Qué puedes hacer aquí?</h2>
+        <p class="lead">
+          Este es tu centro de control para administrar
+        </p>
+        <p class="lead">
+          todos los aspectos de tu inventario.
+        </p>
+        
+        <p>Usa el menú de navegación a la izquierda para:</p>
+        <ul>
+          <li>Revisar tu <strong>Stock Actual</strong> y el historial de <strong>Movimientos</strong>.</li>
+          <li>Registrar nuevas <strong>Compras</strong> a proveedores y <strong>Ventas</strong> a clientes.</li>
+          <li>Administrar tus catálogos de <strong>Productos</strong>, <strong>Categorías</strong>, <strong>Clientes</strong> y <strong>Proveedores</strong>.</li>
+        </ul>
+
+        <a class="btn btn-primary btn-lg mt-3" href="{% url 'existencias-list' %}" role="button">Ver Stock Actual</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% load static %}
+<aside class="sidebar" data-turbo-permanent>
+  
+  <header class="sidebar-header">
+    <img src="{% static 'img/babyromerito.png' %}" alt="Baby Romerito Logo" class="sidebar-logo">
+    <h3>Baby Romerito</h3>
+  </header>
+
+  <nav>
+    <ul class="nav flex-column">
+      
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'existencias-list' %}">Stock Actual</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'movimiento-list' %}">Movimientos</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'compra-list' %}">Compras</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'venta-list' %}">Ventas</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'producto-list' %}">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'categoria-list' %}">Categorías</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'almacen-list' %}">Almacenes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'cliente-list' %}">Clientes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'proveedor-list' %}">Proveedores</a>
+      </li>
+    </ul>
+  </nav>
+
+</aside>

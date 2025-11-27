@@ -1,0 +1,51 @@
+{% load crispy_forms_tags %}
+<tr id="new-producto-row">
+  <td colspan="5" class="p-0">
+    <form hx-post="{% url 'producto-create' %}" 
+          hx-target="closest tr" 
+          hx-swap="outerHTML settle:1s"
+          class="m-0">
+      {% csrf_token %}
+      
+      <table class="w-100">
+        <tr>
+          <td class="p-2" style="width: 15%;"> 
+            {{ form.sku|as_crispy_field }} 
+          </td>
+
+          <td class="p-2" style="width: 35%;"> 
+            {{ form.nombre|as_crispy_field }}
+            {{ form.descripcion|as_crispy_field }}
+          </td>
+          
+          <td class="p-2" style="width: 20%;"> 
+            {{ form.categoria|as_crispy_field }}
+          </td>
+
+          <td class="p-2" style="width: 15%;">
+            {{ form.costo_compra|as_crispy_field }}
+            {{ form.costo_venta|as_crispy_field }}
+            {{ form.codigo_barra|as_crispy_field }}
+          </td>
+
+          <td class="p-2" style="width: 15%;">
+            <div class="d-flex flex-column gap-2 justify-content-end">
+              <button type="submit" class="btn btn-primary btn-sm">Guardar</button> 
+              <button type="button" 
+                      hx-get="{% url 'producto-list' %}"
+                      hx-target="body"
+                      hx-swap="outerHTML"
+                      class="btn btn-secondary btn-sm">
+                Cancelar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger m-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+    </form>
+  </td>
+</tr>
