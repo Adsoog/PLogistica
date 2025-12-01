@@ -2,7 +2,7 @@
 <aside class="sidebar" data-turbo-permanent>
   
   <header class="sidebar-header">
-    <img src="{% static 'img/babyromerito.png' %}" alt="Baby Romerito Logo" class="sidebar-logo">
+    <img src="{% static 'img/babyromerito.png' %}" alt="Logo" class="sidebar-logo">
     <h3>Baby Romerito</h3>
   </header>
 
@@ -10,36 +10,69 @@
     <ul class="nav flex-column">
       
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'existencias-list' %}">Stock Actual</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'movimiento-list' %}">Movimientos</a>
-      </li>
-      
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'compra-list' %}">Compras</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'venta-list' %}">Ventas</a>
+        <span class="text-uppercase text-muted fw-bold px-3 small mt-3 mb-2 d-block" style="font-size: 0.75rem; letter-spacing: 1px;">Inventario</span>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'producto-list' %}">Productos</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'existencias-list' %}active{% endif %}" href="{% url 'existencias-list' %}">
+          <i class="bi bi-box-seam"></i> Stock Actual
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'catalogo-list' %}">Catalogo</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'movimiento-list' %}active{% endif %}" href="{% url 'movimiento-list' %}">
+          <i class="bi bi-arrow-left-right"></i> Movimientos
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <span class="text-uppercase text-muted fw-bold px-3 small mt-3 mb-2 d-block" style="font-size: 0.75rem; letter-spacing: 1px;">Gestión</span>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'compra-list' %}active{% endif %}" href="{% url 'compra-list' %}">
+          <i class="bi bi-cart-plus"></i> Compras
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'categoria-list' %}">Categorías</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'venta-list' %}active{% endif %}" href="{% url 'venta-list' %}">
+          <i class="bi bi-currency-dollar"></i> Ventas
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <span class="text-uppercase text-muted fw-bold px-3 small mt-3 mb-2 d-block" style="font-size: 0.75rem; letter-spacing: 1px;">Catálogos</span>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'producto-list' %}active{% endif %}" href="{% url 'producto-list' %}">
+          <i class="bi bi-tags"></i> Productos
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'almacen-list' %}">Almacenes</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'catalogo-list' %}active{% endif %}" href="{% url 'catalogo-list' %}">
+          <i class="bi bi-journal-album"></i> Catálogo Base
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'cliente-list' %}">Clientes</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'categoria-list' %}active{% endif %}" href="{% url 'categoria-list' %}">
+          <i class="bi bi-grid"></i> Categorías
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'proveedor-list' %}">Proveedores</a>
+        <a class="nav-link {% if request.resolver_match.url_name == 'almacen-list' %}active{% endif %}" href="{% url 'almacen-list' %}">
+          <i class="bi bi-shop"></i> Almacenes
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'cliente-list' %}active{% endif %}" href="{% url 'cliente-list' %}">
+          <i class="bi bi-people"></i> Clientes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'proveedor-list' %}active{% endif %}" href="{% url 'proveedor-list' %}">
+          <i class="bi bi-truck"></i> Proveedores
+        </a>
       </li>
     </ul>
   </nav>

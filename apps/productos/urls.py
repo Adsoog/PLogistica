@@ -21,5 +21,4 @@ urlpatterns = [
     path('catalogo/create/', views.catalogo_create, name='catalogo-create'),
     path('catalogo/edit/<int:pk>/', views.catalogo_edit, name='catalogo-edit'),
     path('catalogo/delete/<int:pk>/', views.catalogo_delete, name='catalogo-delete'),
-    path('catalogo/pdf/<int:pk>/', views.generar_catalogo_pdf, name='generar-catalogo-pdf'),
 ]

@@ -23,13 +23,6 @@
                 <i class="bi bi-eye"></i>
             </a>
 
-            <a href="{% url 'generar-catalogo-pdf' catalogo.pk %}" 
-               class="btn btn-success btn-sm"
-               target="_blank"
-               title="Descargar PDF">
-                <i class="bi bi-file-earmark-pdf"></i>
-            </a>
-
             <button 
               hx-get="{% url 'catalogo-edit' catalogo.pk %}"
               hx-target="#catalogo-{{ catalogo.pk }}" 
