@@ -1,0 +1,186 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Vista Previa: {{ catalogo.titulo }}{% endblock %}
+
+{% block content %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<div class="container-fluid mb-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="m-0">{{ catalogo.titulo }}</h3>
+            <span class="text-muted">Vista previa: 1 Producto por página</span>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'catalogo-list' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            
+            <button hx-get="{% url 'catalogo-edit' catalogo.pk %}" 
+                    hx-target="#preview-wrapper" 
+                    hx-swap="outerHTML" 
+                    class="btn btn-warning">
+                <i class="bi bi-pencil"></i> Editar
+            </button>
+            
+            <button onclick="descargarPDF()" class="btn btn-danger">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Descargar PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="bg-secondary bg-opacity-10 p-5 rounded overflow-auto" style="max-height: 85vh;" id="preview-wrapper">
+        
+        <div id="content-to-print">
+            
+            {% for producto in productos %}
+            <div class="a4-sheet shadow-lg mb-5" style="background-color: {{ catalogo.fondo_color }};">
+                
+                <div class="sheet-header">
+                    {% if catalogo.header_img %}
+                        <img src="{{ catalogo.header_img.url }}" class="w-100 h-100 object-fit-cover">
+                    {% else %}
+                        <div class="bg-dark text-white h-100 d-flex align-items-center justify-content-center">
+                            <span class="fs-4">HEADER</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="sheet-content">
+                    <div class="text-center w-100">
+                        
+                        <div class="product-img-wrapper bg-white rounded shadow-sm d-inline-block border p-3 mb-3">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}">
+                            {% else %}
+                                <div class="d-flex align-items-center justify-content-center bg-light text-muted" style="width: 200px; height: 200px;">
+                                    <i class="bi bi-image display-1"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <h1 class="display-6 fw-bold mb-1 text-dark">{{ producto.nombre }}</h1>
+
+                        <div class="display-3 text-danger fw-bold">
+                            S/ {{ producto.costo_venta|floatformat:2 }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sheet-footer">
+                    {% if catalogo.footer_img %}
+                        <img src="{{ catalogo.footer_img.url }}" class="w-100 h-100 object-fit-cover">
+                    {% else %}
+                        <div class="bg-dark text-white h-100 d-flex align-items-center justify-content-center">
+                            <span>FOOTER</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+<style>
+    .a4-sheet {
+        /* Dimensiones fijas A4 en mm */
+        width: 210mm;
+        height: 296mm; /* 1mm menos para evitar desborde */
+        position: relative;
+        background: white;
+        margin: 0 auto;
+        
+        /* Padding para no pisar header/footer */
+        padding-top: 55mm;    /* Header height + aire */
+        padding-bottom: 40mm; /* Footer height + aire */
+        padding-left: 15mm;
+        padding-right: 15mm;
+        
+        /* Control de flujo */
+        box-sizing: border-box;
+        overflow: hidden; /* CORTA EL CONTENIDO SI SE PASA */
+        page-break-after: always; /* Fuerza hoja nueva */
+    }
+
+    /* Evitar hoja extra al final */
+    .a4-sheet:last-child {
+        page-break-after: avoid;
+    }
+
+    /* Header Fijo Arriba */
+    .sheet-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50mm; /* 5cm de alto */
+        overflow: hidden;
+    }
+
+    /* Footer Fijo Abajo */
+    .sheet-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 35mm; /* 3.5cm de alto */
+        overflow: hidden;
+    }
+
+    /* Área central flexible */
+    .sheet-content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Control estricto de imagen para que no rompa la hoja */
+    .product-img-wrapper {
+        max-width: 100%;
+        width: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .product-img-wrapper img {
+        max-height: 110mm; /* Máximo 11cm de alto */
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .object-fit-cover { object-fit: cover; }
+</style>
+
+<script>
+    function descargarPDF() {
+        const element = document.getElementById('content-to-print');
+        
+        const opt = {
+            margin:       0, // IMPORTANTE: 0 márgenes, el CSS ya los tiene
+            filename:     '{{ catalogo.titulo|slugify }}.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { 
+                scale: 2,       // Alta resolución
+                useCORS: true,  // Permite imágenes externas
+                scrollY: 0      // Evita bugs de scroll
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait' 
+            }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+{% endblock %}

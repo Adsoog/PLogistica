@@ -21,43 +21,22 @@
 
     <div class="row">
         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-white fw-bold">
-                    <i class="bi bi-person-lines-fill"></i> Datos Generales
+           <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                    <span class="fw-bold">
+                        <i class="bi bi-person-lines-fill"></i> Datos Generales
+                    </span>
+                    
+                    <button class="btn btn-sm btn-success" type="button"
+                            hx-get="{% url 'venta-cliente-quick-create' venta.pk %}"
+                            hx-target="#modales-container"
+                            hx-swap="innerHTML">
+                        <i class="bi bi-person-plus-fill"></i> Nuevo
+                    </button>
                 </div>
-                <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Cliente</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" 
-                                       value="{{ venta.cliente.nombre|default:'' }}" 
-                                       placeholder="Buscar cliente..." 
-                                       readonly>
-                                <button class="btn btn-outline-primary" type="button">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                            {% if not venta.cliente %}
-                                <div class="text-warning small mt-1">
-                                    <i class="bi bi-exclamation-triangle"></i> Seleccione un cliente
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Fecha</label>
-                            <input type="date" class="form-control" value="{{ venta.fecha|date:'Y-m-d' }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Documento</label>
-                            <input type="text" class="form-control" 
-                                   value="{{ venta.numero_documento|default:'' }}" 
-                                   placeholder="B-0001">
-                        </div>
-                    </form>
-                </div>
+                
+                {% include 'compraventa/partials/venta_info_card.html' %}
+                
             </div>
         </div>
 
@@ -101,13 +80,21 @@
 
     <div class="fixed-bottom bg-white border-top p-3 shadow-lg" style="z-index: 1030;">
         <div class="container-fluid d-flex justify-content-end gap-2">
+            
             <a href="{% url 'venta-list' %}" class="btn btn-outline-secondary px-4">Cancelar / Salir</a>
-            <button type="button" class="btn btn-success px-4 fw-bold">
-                <i class="bi bi-check-circle-fill"></i> Confirmar Venta
-            </button>
+            
+            <form action="{% url 'venta-confirmar' venta.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success px-4 fw-bold" 
+                        onclick="return confirm('¿Estás seguro de confirmar esta venta? Se generará el número de documento.')">
+                    <i class="bi bi-check-circle-fill"></i> Confirmar Venta
+                </button>
+            </form>
+
         </div>
     </div>
 </div>
+
 
 <div style="margin-bottom: 80px;"></div>
 

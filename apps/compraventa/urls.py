@@ -20,9 +20,12 @@ ventapatterns = [
     # Dinamic views
     path('venta/dinamica/nueva/', venta_views.venta_dinamica_create, name='venta-dinamica-create'),
     path('venta/dinamica/detalle/<int:pk>/', venta_views.venta_dinamica_detail, name='venta-dinamica-detail'),
+    path('venta/general/update/<int:pk>/', venta_views.venta_general_update, name='venta-general-update'),
     path('venta/dinamica/item/add/<int:pk>/', venta_views.venta_dinamica_item_create, name='venta-dinamica-item-create'),
     path('venta/item/update/<int:pk>/', venta_views.venta_item_update, name='venta-item-update'),
     path('venta/item/delete/<int:pk>/', venta_views.venta_item_delete, name='venta-item-delete'),
+    path('venta/cliente/quick-create/<int:pk>/', venta_views.venta_cliente_quick_create, name='venta-cliente-quick-create'),
+    path('venta/confirmar/<int:pk>/', venta_views.venta_confirmar, name='venta-confirmar'),
 ]
 
 

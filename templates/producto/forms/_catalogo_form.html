@@ -1,0 +1,54 @@
+{% load crispy_forms_tags %}
+<tr id="new-catalogo-row">
+  <td colspan="4" class="p-0 bg-light">
+    <form hx-post="{% url 'catalogo-create' %}" 
+          hx-encoding="multipart/form-data"
+          hx-target="closest tr" 
+          hx-swap="outerHTML settle:1s"
+          class="p-3 border rounded m-2 shadow-sm">
+      
+      {% csrf_token %}
+      
+      <h5 class="mb-3">Nuevo Catálogo</h5>
+
+      <div class="row">
+          <div class="col-md-6 mb-2">
+            {{ form.titulo|as_crispy_field }}
+          </div>
+          <div class="col-md-3 mb-2">
+             {{ form.fondo_color|as_crispy_field }}
+          </div>
+          <div class="col-md-12 mb-2">
+             {{ form.productos|as_crispy_field }}
+             <small class="text-muted">Mantén presionado Ctrl para seleccionar varios.</small>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-6 mb-2">
+              {{ form.header_img|as_crispy_field }}
+          </div>
+          <div class="col-md-6 mb-2">
+              {{ form.footer_img|as_crispy_field }}
+          </div>
+      </div>
+
+      <div class="d-flex gap-2 justify-content-end mt-3">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar
+          </button> 
+          <button type="button" 
+                  hx-get="{% url 'catalogo-list' %}"
+                  hx-target="body"
+                  hx-swap="outerHTML"
+                  class="btn btn-secondary">
+             Cancelar
+          </button>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger mt-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+    </form>
+  </td>
+</tr>

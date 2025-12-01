@@ -1,38 +1,14 @@
 from django import forms
 
+from apps.clientes.models import Cliente
+from apps.compraventa.models import Venta, VentaItem
 from django.forms import inlineformset_factory
 
-from apps.compraventa.models import Compra, CompraItem, Venta, VentaItem
-from apps.inventario.models import Movimiento
 
-# --- Formulario de Compra y sus Items ---
-
-class CompraForm(forms.ModelForm):
-    class Meta:
-        model = Compra
-        fields = ['proveedor', 'fecha', 'numero_documento', 'estado']
-        widgets = {
-            'fecha': forms.DateInput(
-                attrs={'type': 'date'},
-                format='%Y-%m-%d'
-            ),
-        }
-
-CompraItemFormSet = inlineformset_factory(
-    Compra,         # El modelo "Padre"
-    CompraItem,     # El modelo "Hijo"
-    fields=('producto', 'cantidad', 'precio_costo'), # Campos a mostrar por item
-    extra=1,        # Empezar con 1 fila de item vacía
-    can_delete=True # Permitir eliminar items existentes
-)
-
-
-# --- Formulario de Venta y sus Items ---
 
 class VentaForm(forms.ModelForm):
     class Meta:
         model = Venta
-        # Campos que el usuario llenará en el formulario principal
         fields = ['cliente', 'fecha', 'numero_documento', 'estado']
         widgets = {
             'fecha': forms.DateInput(
@@ -70,20 +46,21 @@ class VentaItemForm(forms.ModelForm):
         }
 
 
-# --- Formulario de Movimiento (Para Ajustes) ---
 
-class MovimientoForm(forms.ModelForm):
+class VentaGeneralForm(forms.ModelForm):
     class Meta:
-        model = Movimiento
-        # Campos para el formulario de "Nuevo Movimiento" (Ajustes)
-        fields = ['producto', 'almacen', 'tipo', 'cantidad', 'motivo']
+        model = Venta
+        fields = ['cliente', 'tipo_comprobante', 'fecha']
+        widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-select fw-bold'}),
+            'tipo_comprobante': forms.Select(attrs={'class': 'form-select'}),
+            'fecha': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'type': 'date', 'class': 'form-control'}
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Opcional: Limitar el "tipo" solo a Ajuste si este form es solo para eso
-        self.fields['tipo'].choices = [
-            ('AJUSTE', 'Ajuste'),
-            ('ENTRADA', 'Entrada (Manual)'),
-            ('SALIDA', 'Salida (Manual)'),
-        ]
-        self.fields['tipo'].initial = 'AJUSTE'
+        self.fields['cliente'].queryset = Cliente.objects.all().order_by('nombre')
+        self.fields['cliente'].empty_label = "--- Seleccione Cliente ---"

@@ -1,0 +1,46 @@
+<div class="card-body" id="venta-info-card">
+
+    <form hx-post="{% url 'venta-general-update' venta.pk %}"
+          hx-trigger="change"
+          hx-target="#venta-info-card"
+          hx-swap="outerHTML">
+
+        <div class="mb-3">
+            <label class="form-label text-muted small text-uppercase fw-bold">Cliente</label>
+            {{ general_form.cliente }}
+            
+            {% if general_form.cliente.errors %}
+                <div class="text-danger small mt-1">{{ general_form.cliente.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label class="form-label text-muted small text-uppercase fw-bold">Fecha</label>
+                {{ general_form.fecha }}
+                {% if general_form.fecha.errors %}
+                    <div class="text-danger small mt-1">{{ general_form.fecha.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-6 mb-3">
+                <label class="form-label text-muted small text-uppercase fw-bold">Tipo</label>
+                {{ general_form.tipo_comprobante }}
+            </div>
+        </div>
+    </form>
+
+    <div class="mb-3 text-end">
+
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-muted small text-uppercase fw-bold">Documento</label>
+        {% if venta.numero_documento %}
+            <input type="text" class="form-control fw-bold text-success" value="{{ venta.numero_documento }}" readonly>
+        {% else %}
+            <input type="text" class="form-control fst-italic text-muted" value="Generación Automática" readonly>
+        {% endif %}
+    </div>
+
+</div>

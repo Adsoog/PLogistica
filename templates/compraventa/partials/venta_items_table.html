@@ -23,9 +23,12 @@
           <td>
              <span class="fw-bold">{{ item.producto.nombre }}</span><br>
              <small class="text-muted">{{ item.producto.codigo_barra }}</small>
+             <div class="small text-muted fst-italic mt-1">
+                 Base: S/ {{ item.producto.costo_venta|floatformat:2 }}
+             </div>
           </td>
           
-          <td class="text-center">
+          <td class="text-center align-top">
             <input type="number" 
                    name="cantidad" 
                    value="{{ item.cantidad|floatformat:0 }}" 
@@ -37,7 +40,7 @@
                    hx-swap="outerHTML">
           </td>
           
-          <td class="text-end">
+          <td class="text-end align-top">
              <div class="input-group input-group-sm">
                 <span class="input-group-text bg-white border-end-0">S/</span>
                 <input type="number" 
@@ -46,17 +49,35 @@
                        class="form-control text-end border-start-0 no-arrow"
                        step="0.01"
                        hx-post="{% url 'venta-item-update' item.pk %}"
-                       hx-trigger="keyup delay:50ms"
+                       hx-trigger="keyup delay:500ms"
                        hx-target="#items-container"
                        hx-swap="outerHTML">
              </div>
-          </td>
+
+             {% if item.diferencia_precio != 0 %}
+                <div class="small fw-bold mt-1 lh-1 
+                    {% if item.diferencia_precio > 0 %}text-success{% else %}text-danger{% endif %}">
+                    
+                    {% if item.diferencia_precio > 0 %}
+                        <i class="bi bi-arrow-up-short"></i>+{{ item.diferencia_precio|floatformat:2 }}
+                        <div class="text-muted fw-normal" style="font-size: 0.85em;">
+                            (Total: +{{ item.ganancia_extra_total|floatformat:2 }})
+                        </div>
+                    {% else %}
+                        <i class="bi bi-arrow-down-short"></i>{{ item.diferencia_precio|floatformat:2 }}
+                        <div class="text-muted fw-normal" style="font-size: 0.85em;">
+                            (Total: {{ item.ganancia_extra_total|floatformat:2 }})
+                        </div>
+                    {% endif %}
+                </div>
+             {% endif %}
+             </td>
           
-          <td class="text-end fw-bold">
+          <td class="text-end fw-bold align-top">
              S/ {{ item.subtotal|floatformat:2 }}
           </td>
 
-          <td class="text-center">
+          <td class="text-center align-top">
             <button class="btn btn-sm btn-outline-danger border-0"
                     type="button"
                     hx-post="{% url 'venta-item-delete' item.pk %}"
@@ -64,7 +85,6 @@
                     hx-swap="outerHTML"
                     hx-confirm="¿Estás seguro de eliminar este producto?">
                 <i class="bi bi-trash"></i>
-                Eliminar
             </button>
           </td>
         </tr>

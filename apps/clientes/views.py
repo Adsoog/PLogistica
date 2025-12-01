@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
+
+from apps.compraventa.models import Venta
 from .models import Cliente
 from .forms import ClienteForm
 
@@ -49,3 +51,5 @@ def cliente_delete(request, pk):
         cliente.delete()
         return HttpResponse(status=200)
     return HttpResponse(status=405)
+
+

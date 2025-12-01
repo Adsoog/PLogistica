@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        /* 1. CONFIGURACIÓN DE LA PÁGINA A4 Y MARCOS (FRAMES) */
+        @page {
+            size: A4;
+            margin: 0cm; /* Sin márgenes para que el header/footer toquen los bordes */
+
+            /* DEFINICIÓN DEL HEADER (Parte Superior) */
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                left: 0cm; 
+                width: 21cm; 
+                top: 0cm; 
+                height: 5cm; /* Ajusta esto si tu imagen es más alta o más baja */
+            }
+
+            /* DEFINICIÓN DEL FOOTER (Parte Inferior) */
+            @frame footer_frame {
+                -pdf-frame-content: footer_content;
+                left: 0cm; 
+                width: 21cm; 
+                top: 26cm;   /* Posición Y donde empieza el footer */
+                height: 3.7cm; 
+            }
+
+            /* DEFINICIÓN DEL CONTENIDO (Donde van los productos) */
+            @frame content_frame {
+                left: 2cm; 
+                width: 17cm; 
+                top: 5.5cm;  /* Empieza justo debajo del header */
+                height: 20cm; /* Termina antes del footer */
+            }
+        }
+
+        /* 2. ESTILOS CSS */
+        body {
+            font-family: Helvetica, sans-serif;
+            background-color: {{ catalogo.fondo_color }};
+            color: #333333;
+        }
+
+        /* Estilo para que las imágenes de cabecera/pie llenen todo el ancho */
+        .banner-img {
+            width: 21cm;
+            height: 100%;
+        }
+
+        /* Contenedor del producto */
+        .product-wrapper {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        /* Imagen del producto */
+        .product-image {
+            width: 10cm;        /* Ancho fijo para controlar el diseño */
+            height: 10cm;       /* Alto máximo */
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        /* Caja gris por si no hay imagen */
+        .no-image {
+            width: 10cm;
+            height: 8cm;
+            background-color: #eeeeee;
+            color: #888888;
+            text-align: center;
+            padding-top: 4cm;
+            margin-left: 3.5cm; /* Truco para centrar cajas en xhtml2pdf */
+            margin-bottom: 20px;
+        }
+
+        /* Tipografía del Producto */
+        h1 {
+            font-size: 32px;
+            color: #000;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .sku {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .price {
+            font-size: 45px;
+            color: #dc3545; /* Color Rojo */
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="header_content">
+        {% if catalogo.header_img %}
+            <img src="{{ catalogo.header_img.url }}" class="banner-img">
+        {% else %}
+            <div style="background-color: #333; color: white; padding: 40px; text-align: center;">
+                <h2>{{ catalogo.titulo }}</h2>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="footer_content">
+        {% if catalogo.footer_img %}
+            <img src="{{ catalogo.footer_img.url }}" class="banner-img">
+        {% endif %}
+    </div>
+
+    {% for producto in productos %}
+        
+        <div class="product-wrapper">
+            
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="product-image">
+            {% else %}
+                <div class="no-image">Sin Imagen</div>
+            {% endif %}
+
+            <h1>{{ producto.nombre }}</h1>
+            <div class="sku">SKU: {{ producto.sku }}</div>
+            
+            <div class="description">
+                {{ producto.descripcion|default:""|truncatechars:200 }}
+            </div>
+
+            <div class="price">
+                S/ {{ producto.costo_venta|floatformat:2 }}
+            </div>
+
+        </div>
+
+        {% if not forloop.last %}
+            <pdf:nextpage />
+        {% endif %}
+
+    {% endfor %}
+
+</body>
+</html>

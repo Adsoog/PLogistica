@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+{% block title %}Catálogos{% endblock %}
+
+{% block content %}
+
+<header class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">Catálogos de Campaña</h2>
+  <button 
+    hx-get="{% url 'catalogo-create' %}" 
+    hx-target="#catalogo-table" 
+    hx-swap="afterbegin" 
+    class="btn btn-primary">
+    <i class="bi bi-plus-lg"></i> Nuevo Catálogo
+  </button>
+</header>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <table id="datatable-catalogos" class="table table-striped table-hover align-middle" style="width:100%">
+      <thead class="table-dark">
+        <tr>
+          <th style="width: 35%;">Título</th> 
+          <th style="width: 15%;">Creación</th> 
+          <th style="width: 15%;">Productos</th> 
+          <th style="width: 35%;">Acciones</th> 
+        </tr>
+      </thead>
+      <tbody id="catalogo-table">
+        {% for catalogo in catalogos %}
+          {% include 'producto/partials/_catalogo_list_rows.html' %}
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center py-4">No hay catálogos registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+    $('#datatable-catalogos').DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/2.1.0/i18n/es-ES.json',
+        },
+        columnDefs: [
+            { orderable: false, targets: 3 } 
+        ]
+    });
+});
+</script>
+{% endblock %}

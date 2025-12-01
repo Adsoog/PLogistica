@@ -6,11 +6,10 @@ from django.views.generic import ListView
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
+from apps.clientes.forms import ClienteForm
 from apps.productos.models import Producto
 from ..models import  Venta, VentaItem
-from ..forms import (
-    VentaForm, VentaItemForm, VentaItemFormSet
-)
+from apps.compraventa.forms.venta_forms import VentaGeneralForm, VentaItemForm
 
 
 class VentaListView(ListView):
@@ -105,14 +104,30 @@ def venta_dinamica_create(request):
 
 def venta_dinamica_detail(request, pk):
     venta = get_object_or_404(Venta, pk=pk)
+    general_form = VentaGeneralForm(instance=venta)
+    venta.refresh_from_db()
     items = venta.items.all()
     for item in items:
         item.form = VentaItemForm(instance=item)
     context = {
         'venta': venta,
         'items': items,
+        'general_form': general_form,
     }
     return render(request, 'compraventa/pages/venta_dinamica_detail.html', context)
+
+
+def venta_general_update(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    form = VentaGeneralForm(request.POST, instance=venta)
+    
+    if form.is_valid():
+        form.save()
+        
+    return render(request, 'compraventa/partials/venta_info_card.html', {
+        'venta': venta,
+        'general_form': form
+    })
 
 
 def venta_dinamica_item_create(request, pk):
@@ -150,7 +165,6 @@ def venta_item_update(request, pk):
     item.save()
     venta = item.venta
     venta.refresh_from_db()
-    
     return render(request, 'compraventa/partials/venta_items_table.html', {'venta': venta})
 
 def venta_item_delete(request, pk):
@@ -159,3 +173,44 @@ def venta_item_delete(request, pk):
     item.delete()
     venta.refresh_from_db()
     return render(request, 'compraventa/partials/venta_items_table.html', {'venta': venta})
+
+
+def venta_cliente_quick_create(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save()
+            venta.cliente = cliente
+            venta.save()
+            form = VentaGeneralForm(instance=venta)
+            context = {
+                'venta': venta,
+                'general_form': form    
+            }
+            return render(request, 'compraventa/partials/venta_info_card.html', context)
+    else:
+        form = ClienteForm()
+    return render(request, 'compraventa/modals/venta_cliente_modal.html', {
+        'form': form, 
+        'venta': venta
+    })
+
+def venta_confirmar(request, pk):
+    venta = get_object_or_404(Venta, pk=pk)
+    
+    if not venta.items.exists():
+        messages.error(request, "No hay items en la venta.")
+        return redirect('venta-dinamica-detail', pk=pk)
+        
+    if not venta.cliente:
+        messages.error(request, "Falta seleccionar el cliente.")
+        return redirect('venta-dinamica-detail', pk=pk)
+
+    try:
+        venta.confirmar_venta() 
+        messages.success(request, f"Venta {venta.numero_documento} creada exitosamente.")
+        return redirect('venta-list')
+    except Exception as e:
+        messages.error(request, f"Error: {e}")
+        return redirect('venta-dinamica-detail', pk=pk)

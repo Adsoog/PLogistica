@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.contrib import messages
-from apps.compraventa.forms import CompraForm, CompraItemFormSet
+from apps.compraventa.forms.compra_forms import CompraForm, CompraItemFormSet
 from apps.compraventa.models import Compra
 
 
